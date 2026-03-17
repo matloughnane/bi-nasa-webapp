@@ -1,0 +1,44 @@
+import { Geist, JetBrains_Mono } from "next/font/google"
+
+import "./globals.css"
+import { ThemeProvider } from "@/providers/theme-provider"
+import { QueryProvider } from "@/providers/query-provider"
+import { cn } from "@/lib/utils"
+import { TooltipProvider } from "@/components/ui/tooltip"
+
+const fontSans = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+})
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn(
+        "antialiased",
+        fontSans.variable,
+        "font-mono",
+        jetbrainsMono.variable
+      )}
+    >
+      <body>
+        <TooltipProvider>
+          <QueryProvider>
+            <ThemeProvider>{children}</ThemeProvider>
+          </QueryProvider>
+        </TooltipProvider>
+      </body>
+    </html>
+  )
+}
