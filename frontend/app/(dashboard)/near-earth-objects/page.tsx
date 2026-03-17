@@ -5,6 +5,7 @@ import { addDays, format, subDays } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import * as React from "react"
 
+import { NeoChart } from "@/components/neo/neo-chart"
 import { NeoDataTable } from "@/components/neo/neo-data-table"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -85,7 +86,8 @@ export default function NearEarthObjectsPage() {
       )}
 
       {data && (
-        <div className={cn(isFetching && "opacity-50 transition-opacity")}>
+        <div className={cn("flex flex-col gap-4", isFetching && "opacity-50 transition-opacity")}>
+          <NeoChart data={data} />
           <NeoDataTable data={data} />
         </div>
       )}

@@ -1,6 +1,13 @@
+import type { Metadata } from "next"
 import { FeatureCard } from "@/components/home/feature-card"
 import { LandingHeader } from "@/components/landing/landing-header"
 import { Button } from "@/components/ui/button"
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "About this NASA Dashboard submission by Matthew Loughnane for the Bounce Insights coding challenge.",
+}
 
 export default function AboutPage() {
   return (
