@@ -8,6 +8,7 @@ import {
   Tooltip,
   XYChart,
 } from "@visx/xychart"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export interface DateCount {
   date: string
@@ -20,6 +21,8 @@ interface NeoChartProps {
 }
 
 export function NeoChart({ safeCounts, hazardousCounts }: NeoChartProps) {
+  const isMobile = useIsMobile()
+
   return (
     <>
       <div className="mb-2 rounded-xs border p-4">
@@ -58,6 +61,9 @@ export function NeoChart({ safeCounts, hazardousCounts }: NeoChartProps) {
           <Axis
             orientation="bottom"
             label="Approach Date"
+            tickFormat={(value, index) =>
+              isMobile && index % 2 === 0 ? "" : value
+            }
             tickLabelProps={{
               fontSize: 11,
               fill: "var(--color-muted-foreground)",
@@ -70,7 +76,7 @@ export function NeoChart({ safeCounts, hazardousCounts }: NeoChartProps) {
             }}
             stroke="none"
             tickStroke="none"
-            />
+          />
           <Axis
             orientation="left"
             label="Count"

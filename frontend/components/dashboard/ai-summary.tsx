@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import type { ApiResponse } from "@/lib/services/api"
-import { MarkdownWrapper } from "./react-wrapper"
+import { MarkdownWrapper } from "../common/react-wrapper"
 
 interface AiSummaryProps {
   type: "neo" | "flr"
@@ -53,7 +53,7 @@ export function AiSummary({ type, startDate, endDate }: AiSummaryProps) {
           )}
         </CardContent>
       )}
-      <CardFooter className="gap-2">
+      <CardFooter className="gap-2 flex flex-col md:flex-row items-end">
         <Input
           placeholder="Ask a question about this data..."
           value={question}

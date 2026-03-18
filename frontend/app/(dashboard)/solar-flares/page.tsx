@@ -11,9 +11,10 @@ import { FlrDataTable } from "@/components/flr/flr-data-table"
 import { DatePicker } from "@/components/ui/date-picker"
 import { FacetedFilter } from "@/components/ui/faceted-filter"
 import { fetchFlr } from "@/lib/services/flr"
-import { AiSummary } from "@/components/common/ai-summary"
+import { AiSummary } from "@/components/dashboard/ai-summary"
 import { cn } from "@/lib/utils"
 import { formatDate } from "@/lib/format"
+import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 
 export default function SolarFlaresPage() {
   const [today] = useState(() => new Date())
@@ -88,19 +89,11 @@ export default function SolarFlaresPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col items-start justify-between lg:flex-row lg:items-center">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Solar Flares</h1>
-          <p className="text-sm text-muted-foreground">
-            Solar flare events from NASA&apos;s DONKI API.
-          </p>
-        </div>
-
-        <div className="flex flex-col pt-2">
-          <div className="flex items-center gap-2">
-            {isFetching && (
-              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-hidden="true" />
-            )}
+      <DashboardHeader
+        title="Solar Flares"
+        description={`Solar flare events from NASA's DONKI API.`}
+        actions={
+          <div className="flex flex-col items-end gap-2 md:flex-row">
             <FacetedFilter
               title="Class"
               options={classOptions}
@@ -121,8 +114,9 @@ export default function SolarFlaresPage() {
               disabledAfter={today}
             />
           </div>
-        </div>
-      </div>
+        }
+        isLoading={isFetching}
+      />
 
       <div aria-live="polite" role="status">
         {isLoading && !result && (
@@ -133,7 +127,10 @@ export default function SolarFlaresPage() {
         )}
 
         {isError && !result && (
-          <div className="flex h-24 items-center justify-center text-sm text-destructive" role="alert">
+          <div
+            className="flex h-24 items-center justify-center text-sm text-destructive"
+            role="alert"
+          >
             Failed to load data:{" "}
             {error instanceof Error ? error.message : "Unknown error"}
           </div>

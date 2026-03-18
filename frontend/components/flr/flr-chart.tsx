@@ -7,6 +7,7 @@ import { Zoom } from "@visx/zoom"
 import { geoConicConformal } from "d3-geo"
 import type { FlrEvent } from "@/lib/services/flr"
 import { Button } from "../ui/button"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface FlrChartProps {
   data: FlrEvent[]
@@ -46,7 +47,8 @@ function parseSourceLocation(loc: string): { lat: number; lon: number } | null {
   return { lat, lon }
 }
 
-const ASPECT_RATIO = 260 / 800
+const ASPECT_RATIO_DESKTOP = 260 / 800
+const ASPECT_RATIO_MOBILE = 320 / 800
 
 const boundingFeatures: BoundingFeature[] = [
   {
@@ -68,6 +70,9 @@ const boundingFeatures: BoundingFeature[] = [
 ]
 
 export function FlrChart({ data }: FlrChartProps) {
+  const isMobile = useIsMobile()
+  const aspectRatio = isMobile ? ASPECT_RATIO_MOBILE : ASPECT_RATIO_DESKTOP
+
   return (
     <div className="rounded-xs border p-4">
       <div className="flex flex-row items-start justify-between">
@@ -89,7 +94,7 @@ export function FlrChart({ data }: FlrChartProps) {
       <ParentSize>
         {({ width: parentWidth }) => {
           if (parentWidth < 10) return null
-          const height = Math.round(parentWidth * ASPECT_RATIO)
+          const height = Math.round(parentWidth * aspectRatio)
           return (
             <FlrChartInner data={data} width={parentWidth} height={height} />
           )

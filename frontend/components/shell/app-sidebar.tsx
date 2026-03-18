@@ -11,10 +11,11 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { ChevronLeftCircle, Earth, Info, Sun } from "lucide-react"
+import { ChevronLeftCircle, Earth, Info, Sun as SunIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Logo } from "../common/logo"
 import Link from "next/link"
+import { ThemeToggle } from "../common/theme-toggle"
 
 const data = {
   navMain: [
@@ -26,7 +27,7 @@ const data = {
     {
       title: "Solar Flares",
       url: "/solar-flares",
-      icon: <Sun />,
+      icon: <SunIcon />,
     },
     {
       title: "About",
@@ -63,6 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
+        <ThemeToggle />
         <Button variant="outline" size="sm" asChild>
           <Link href="/">
             <ChevronLeftCircle className="mr-2 h-4 w-4" /> Back to Landing

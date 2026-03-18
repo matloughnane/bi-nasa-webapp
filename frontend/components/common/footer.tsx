@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Logo } from "./logo"
+import { ThemeToggle } from "./theme-toggle"
 
 export function Footer() {
   return (
@@ -46,8 +47,8 @@ export function Footer() {
               </Link>
             </div>
           </div>
-          <div className="pt-6 font-mono text-xs text-muted-foreground">
-            (Press <kbd>d</kbd> to toggle dark mode)
+          <div className="pt-6 flex flex-row justify-end">
+            <ThemeToggle />
           </div>
         </div>
       </div>

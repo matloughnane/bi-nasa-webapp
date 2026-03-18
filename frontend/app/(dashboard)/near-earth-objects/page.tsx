@@ -11,8 +11,9 @@ import { NeoDataTable } from "@/components/neo/neo-data-table"
 import { FacetedFilter } from "@/components/ui/faceted-filter"
 import { DatePicker } from "@/components/ui/date-picker"
 import { fetchNeo, fetchNeoAll, type NeoObject } from "@/lib/services/neo"
-import { AiSummary } from "@/components/common/ai-summary"
+import { AiSummary } from "@/components/dashboard/ai-summary"
 import { cn } from "@/lib/utils"
+import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 
 function formatDate(date: Date): string {
   return format(date, "yyyy-MM-dd")
@@ -143,21 +144,11 @@ export default function NearEarthObjectsPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col items-start justify-between lg:flex-row lg:items-center">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">
-            Near Earth Objects
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Asteroid close-approach data from NASA&apos;s NeoWs API.
-          </p>
-        </div>
-
-        <div className="flex flex-col pt-2">
-          <div className="flex items-center gap-2">
-            {(isFetching || isFetchingAll) && (
-              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-hidden="true" />
-            )}
+      <DashboardHeader
+        title="Near Earth Objects"
+        description={`Asteroid close-approach data from NASA's NeoWs API.`}
+        actions={
+          <div className="flex flex-col md:flex-row items-end gap-2">
             <FacetedFilter
               title="Hazardous"
               options={hazardousOptions}
@@ -178,11 +169,31 @@ export default function NearEarthObjectsPage() {
               disabledAfter={addDays(startDate, 7)}
             />
           </div>
+        }
+        isLoading={isFetching}
+      />
+      {/* <div className="flex flex-col items-start justify-between lg:flex-row lg:items-center"> */}
+      {/* <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-bold tracking-tight">
+            Near Earth Objects
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Asteroid close-approach data from NASA&apos;s NeoWs API.
+          </p>
+        </div>
+
+        <div className="flex flex-col w-full pt-2">
+          <div className="flex flex-col md:flex-row items-end gap-2">
+            {(isFetching || isFetchingAll) && (
+              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-hidden="true" />
+            )}
+            
+          </div>
           <span className="pt-2 text-right text-xs text-muted-foreground">
             Note: This API is limited to 7 days
           </span>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
 
       <div aria-live="polite" role="status">
         {(isLoading || isLoadingAll) && !result && (
@@ -193,7 +204,10 @@ export default function NearEarthObjectsPage() {
         )}
 
         {isError && !result && (
-          <div className="flex h-24 items-center justify-center text-sm text-destructive" role="alert">
+          <div
+            className="flex h-24 items-center justify-center text-sm text-destructive"
+            role="alert"
+          >
             Failed to load data:{" "}
             {error instanceof Error ? error.message : "Unknown error"}
           </div>
