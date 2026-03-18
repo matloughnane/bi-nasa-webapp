@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { APODCard } from "@/components/home/apod-card"
+import { APODCard } from "@/components/apod/apod-card"
 import { FeatureCard } from "@/components/home/feature-card"
 import { LandingHeader } from "@/components/landing/landing-header"
 import { Button } from "@/components/ui/button"
@@ -8,7 +8,7 @@ import Link from "next/link"
 export const metadata: Metadata = {
   title: "NASA Dashboard | Matthew Loughnane",
   description:
-    "Explore near-earth objects, solar flares, and NASA's Astronomy Picture of the Day. Built with Next.js and the NASA Open API.",
+    "Explore near-earth objects, solar flares, and NASA's Astronomy Picture of the Day.",
 }
 
 export default function LandingPage() {

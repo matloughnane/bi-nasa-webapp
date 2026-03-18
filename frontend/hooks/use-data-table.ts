@@ -16,7 +16,7 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import * as React from "react";
+import { useState, useCallback, useMemo } from "react";
 
 import type { ExtendedColumnSort } from "@/types/data-table";
 
@@ -29,11 +29,16 @@ interface UseDataTableProps<TData>
     | "manualFiltering"
     | "manualPagination"
     | "manualSorting"
+    | "onPaginationChange"
   > {
   initialState?: Omit<Partial<TableState>, "sorting"> & {
     sorting?: ExtendedColumnSort<TData>[];
   };
   enableAdvancedFilter?: boolean;
+  manualPagination?: boolean;
+  pageCount?: number;
+  pagination?: PaginationState;
+  onPaginationChange?: (pagination: PaginationState) => void;
 }
 
 export function useDataTable<TData>(props: UseDataTableProps<TData>) {
@@ -41,36 +46,46 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     columns,
     initialState,
     enableAdvancedFilter = false,
+    manualPagination = false,
+    pageCount,
+    pagination: externalPagination,
+    onPaginationChange: externalOnPaginationChange,
     ...tableProps
   } = props;
 
-  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>(
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>(
     initialState?.rowSelection ?? {},
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>(initialState?.columnVisibility ?? {});
+    useState<VisibilityState>(initialState?.columnVisibility ?? {});
   const [columnFilters, setColumnFilters] =
-    React.useState<ColumnFiltersState>([]);
-  const [sorting, setSorting] = React.useState<SortingState>(
+    useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>(
     initialState?.sorting ?? [],
   );
-  const [pagination, setPagination] = React.useState<PaginationState>({
+  const [internalPagination, setInternalPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: initialState?.pagination?.pageSize ?? 10,
   });
 
-  const onPaginationChange = React.useCallback(
+  const pagination = externalPagination ?? internalPagination;
+
+  const onPaginationChange = useCallback(
     (updaterOrValue: Updater<PaginationState>) => {
-      setPagination((prev) =>
+      const next =
         typeof updaterOrValue === "function"
-          ? updaterOrValue(prev)
-          : updaterOrValue,
-      );
+          ? updaterOrValue(pagination)
+          : updaterOrValue;
+      if (externalOnPaginationChange) {
+        externalOnPaginationChange(next);
+      } else {
+        setInternalPagination(next);
+      }
     },
-    [],
+    [pagination, externalOnPaginationChange],
   );
 
-  const onSortingChange = React.useCallback(
+  const onSortingChange = useCallback(
     (updaterOrValue: Updater<SortingState>) => {
       setSorting((prev) =>
         typeof updaterOrValue === "function"
@@ -81,16 +96,20 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     [],
   );
 
-  const onColumnFiltersChange = React.useCallback(
+  const onColumnFiltersChange = useCallback(
     (updaterOrValue: Updater<ColumnFiltersState>) => {
       setColumnFilters((prev) =>
         typeof updaterOrValue === "function"
           ? updaterOrValue(prev)
           : updaterOrValue,
       );
-      setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+      if (externalOnPaginationChange) {
+        externalOnPaginationChange({ ...pagination, pageIndex: 0 });
+      } else {
+        setInternalPagination((prev) => ({ ...prev, pageIndex: 0 }));
+      }
     },
-    [],
+    [pagination, externalOnPaginationChange],
   );
 
   const table = useReactTable({
@@ -109,6 +128,8 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
       enableColumnFilter: false,
     },
     enableRowSelection: true,
+    manualPagination,
+    ...(pageCount != null && { pageCount }),
     onRowSelectionChange: setRowSelection,
     onPaginationChange,
     onSortingChange,
@@ -123,5 +144,5 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
   });
 
-  return React.useMemo(() => ({ table }), [table]);
+  return useMemo(() => ({ table }), [table]);
 }

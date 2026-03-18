@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Logo } from "./logo"
 
 export function Footer() {
@@ -13,33 +14,36 @@ export function Footer() {
           <div className="grid grid-cols-2 gap-8">
             <div className="flex flex-col gap-2">
               <h4 className="font-semibold">NASA</h4>
-              <a
+              <Link href="/" aria-label="About The Project">
+                Home
+              </Link>
+              <Link href="/about" aria-label="About The Project">
+                About This Project
+              </Link>
+              <Link
                 href="https://api.nasa.gov/"
                 aria-label="NASA Open API"
                 target="_blank"
               >
                 Open APIs
-              </a>
-              <a href="/about" aria-label="About The Project">
-                About This Project
-              </a>
+              </Link>
             </div>
             <div className="flex flex-col gap-2">
               <h4 className="font-semibold">Matthew Loughnane</h4>
-              <a
+              <Link
                 href="https://matloughnane.com/assets/cv/mat-loughnane-cv.pdf"
                 aria-label="Matthew Loughnane's CV"
                 target="_blank"
               >
                 My CV
-              </a>
-              <a
+              </Link>
+              <Link
                 href="https://hexastudios.co"
                 aria-label="Hexa Studios Link"
                 target="_blank"
               >
                 My Work
-              </a>
+              </Link>
             </div>
           </div>
           <div className="pt-6 font-mono text-xs text-muted-foreground">

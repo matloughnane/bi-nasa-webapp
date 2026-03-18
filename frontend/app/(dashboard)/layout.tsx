@@ -34,9 +34,18 @@ export default function DashboardLayout({
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex min-w-0 flex-1 flex-col gap-4 overflow-hidden p-4 pt-0">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-50 focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:shadow-md"
+        >
+          Skip to content
+        </a>
+        <main
+          id="main-content"
+          className="flex min-w-0 flex-1 flex-col gap-4 overflow-hidden p-4 pt-0"
+        >
           {children}
-        </div>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   )

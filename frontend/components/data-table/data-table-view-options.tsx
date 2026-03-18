@@ -2,7 +2,7 @@
 
 import type { Table } from "@tanstack/react-table";
 import { Check, Settings2 } from "lucide-react";
-import * as React from "react";
+import React, { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -30,7 +30,7 @@ export function DataTableViewOptions<TData>({
   disabled,
   ...props
 }: DataTableViewOptionsProps<TData>) {
-  const columns = React.useMemo(
+  const columns = useMemo(
     () =>
       table
         .getAllColumns()

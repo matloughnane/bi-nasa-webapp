@@ -1,4 +1,5 @@
 import axios from "axios"
+import type { ApiResponse } from "./api"
 
 export interface FlrEvent {
   id: string
@@ -12,12 +13,27 @@ export interface FlrEvent {
   link: string
 }
 
+export interface PaginatedResponse<T> {
+  data: T[]
+  total: number
+}
+
 export async function fetchFlr(
   startDate: string,
   endDate: string,
-): Promise<FlrEvent[]> {
-  const { data } = await axios.get<FlrEvent[]>("/api/flr", {
-    params: { start_date: startDate, end_date: endDate },
+  page: number,
+  pageSize: number,
+): Promise<PaginatedResponse<FlrEvent>> {
+  const { data } = await axios.get<ApiResponse<PaginatedResponse<FlrEvent>>>("/api/flr", {
+    params: {
+      start_date: startDate,
+      end_date: endDate,
+      page: page.toString(),
+      page_size: pageSize.toString(),
+    },
   })
-  return data
+  if (data.data === null) {
+    throw new Error(data.message)
+  }
+  return data.data
 }

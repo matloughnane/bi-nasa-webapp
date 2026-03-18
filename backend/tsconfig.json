@@ -19,5 +19,5 @@
     }
   },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules", "build"]
+  "exclude": ["node_modules", "build", "__tests__", "jest.config.ts", "jest.setup.ts"]
 }

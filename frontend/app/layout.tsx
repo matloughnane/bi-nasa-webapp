@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/providers/theme-provider"
 import { QueryProvider } from "@/providers/query-provider"
 import { cn } from "@/lib/utils"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import Script from "next/script"
 
 export const metadata: Metadata = {
   title: {
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s | NASA Dashboard",
   },
   description:
-    "Explore near-earth objects, solar flares, and NASA's Astronomy Picture of the Day. Built with Next.js and the NASA Open API.",
+    "Explore near-earth objects, solar flares, and NASA's Astronomy Picture of the Day.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   openGraph: {
     title: "NASA Dashboard | Matthew Loughnane",
@@ -29,7 +30,14 @@ export const metadata: Metadata = {
       "Explore near-earth objects, solar flares, and NASA's Astronomy Picture of the Day.",
     images: ["/nasa-meta.png"],
   },
-  icons: { icon: "/nasa-meta.png" },
+  icons: {
+    icon: [
+      { url: "/favicon/favicon.ico", sizes: "any" },
+      { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/favicon/apple-touch-icon.png",
+  },
 }
 
 const fontSans = Geist({
@@ -59,6 +67,11 @@ export default function RootLayout({
       )}
     >
       <body>
+        <Script
+          src="https://analytics.hexastudios.co/script.js"
+          data-website-id="28aac794-8f0a-420a-baaf-63a7a2d367b0"
+          strategy="afterInteractive"
+        />
         <TooltipProvider>
           <QueryProvider>
             <ThemeProvider>{children}</ThemeProvider>

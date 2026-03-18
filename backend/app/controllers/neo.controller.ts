@@ -1,85 +1,29 @@
 import type { Request, Response } from "express";
-import { config } from "../../config/index.js";
 import logger from "../../utils/logger.js";
-
-const cache = new Map<string, { data: unknown; timestamp: number }>();
-const CACHE_TTL = 1000 * 60 * 60; // 1 hour
-
-interface NasaNeoResponse {
-  near_earth_objects: Record<
-    string,
-    {
-      id: string;
-      name: string;
-      estimated_diameter: {
-        kilometers: {
-          estimated_diameter_min: number;
-          estimated_diameter_max: number;
-        };
-      };
-      is_potentially_hazardous_asteroid: boolean;
-      close_approach_data: {
-        close_approach_date: string;
-        miss_distance: { kilometers: string };
-        relative_velocity: { kilometers_per_hour: string };
-      }[];
-    }[]
-  >;
-}
+import { UpstreamError } from "../services/errors.js";
+import { fetchNeo } from "../services/neo.service.js";
 
 export async function getNeo(req: Request, res: Response) {
-  const { start_date, end_date } = req.query;
-  const cacheKey = `${start_date}:${end_date}`;
-
-  const cached = cache.get(cacheKey);
-  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-    logger.info(`NEO cache hit for ${cacheKey}`);
-    res.json(cached.data);
-    return;
-  }
-
-  const url = new URL("/neo/rest/v1/feed", config.nasa.baseUrl);
-  url.searchParams.set("api_key", config.nasa.apiKey);
-  url.searchParams.set("start_date", start_date as string);
-  url.searchParams.set("end_date", end_date as string);
+  const { start_date, end_date, page, page_size } = req.query;
+  const paginate = page !== undefined && page_size !== undefined;
+  const pageNum = paginate ? Math.max(1, parseInt(page as string, 10)) : 1;
+  const pageSizeNum = paginate ? Math.max(1, Math.min(100, parseInt(page_size as string, 10))) : 0;
 
   try {
-    const start = performance.now();
-    const response = await fetch(url.toString());
-    const raw = (await response.json()) as NasaNeoResponse;
-    const elapsed = performance.now() - start;
+    const data = await fetchNeo(start_date as string, end_date as string);
 
-    logger.info(`NEO fetch for ${cacheKey} — ${elapsed.toFixed(0)}ms`);
-
-    if (!response.ok) {
-      res.status(response.status).json(raw);
-      return;
+    if (paginate) {
+      const offset = (pageNum - 1) * pageSizeNum;
+      res.json({ status: "ok", message: "NEO data retrieved successfully", data: { data: data.slice(offset, offset + pageSizeNum), total: data.length } });
+    } else {
+      res.json({ status: "ok", message: "NEO data retrieved successfully", data: { data, total: data.length } });
     }
-
-    const flattened = Object.values(raw.near_earth_objects)
-      .flat()
-      .map((obj) => {
-        const approach = obj.close_approach_data[0];
-        return {
-          id: obj.id,
-          name: obj.name,
-          estimated_diameter_min_km:
-            obj.estimated_diameter.kilometers.estimated_diameter_min,
-          estimated_diameter_max_km:
-            obj.estimated_diameter.kilometers.estimated_diameter_max,
-          miss_distance_km: parseFloat(approach?.miss_distance.kilometers ?? "0"),
-          relative_velocity_kmph: parseFloat(
-            approach?.relative_velocity.kilometers_per_hour ?? "0",
-          ),
-          is_potentially_hazardous: obj.is_potentially_hazardous_asteroid,
-          close_approach_date: approach?.close_approach_date ?? "",
-        };
-      });
-
-    cache.set(cacheKey, { data: flattened, timestamp: Date.now() });
-    res.json(flattened);
   } catch (err) {
-    logger.error("NEO fetch failed", err);
-    res.status(502).json({ error: "Failed to fetch from NASA API" });
+    if (err instanceof UpstreamError) {
+      res.status(err.statusCode).json({ status: "error", message: "Upstream NASA API error", data: null });
+    } else {
+      logger.error("NEO fetch failed", err);
+      res.status(502).json({ status: "error", message: "Failed to fetch from NASA API", data: null });
+    }
   }
 }

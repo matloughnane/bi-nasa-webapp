@@ -9,8 +9,9 @@ export function validate(schema: ZodSchema, source: "body" | "query" | "params" 
     } catch (err) {
       if (err instanceof ZodError) {
         res.status(400).json({
-          error: "Validation failed",
-          details: err.issues,
+          status: "error",
+          message: "Validation failed",
+          data: { details: err.issues },
         })
         return
       }

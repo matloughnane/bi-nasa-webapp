@@ -2,7 +2,7 @@
 
 import type { Column } from "@tanstack/react-table"
 import { Check, PlusCircle, XCircle } from "lucide-react"
-import * as React from "react"
+import React, { useState, useCallback } from "react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -37,14 +37,14 @@ export function DataTableFacetedFilter<TData, TValue>({
   options,
   multiple,
 }: DataTableFacetedFilterProps<TData, TValue>) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
 
   const columnFilterValue = column?.getFilterValue()
   const selectedValues = new Set(
     Array.isArray(columnFilterValue) ? columnFilterValue : []
   )
 
-  const onItemSelect = React.useCallback(
+  const onItemSelect = useCallback(
     (option: Option, isSelected: boolean) => {
       if (!column) return
 
@@ -65,7 +65,7 @@ export function DataTableFacetedFilter<TData, TValue>({
     [column, multiple, selectedValues]
   )
 
-  const onReset = React.useCallback(
+  const onReset = useCallback(
     (event?: React.MouseEvent) => {
       event?.stopPropagation()
       column?.setFilterValue(undefined)
@@ -78,7 +78,6 @@ export function DataTableFacetedFilter<TData, TValue>({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          size="sm"
           className="border-dashed font-normal"
         >
           {selectedValues?.size > 0 ? (
@@ -138,7 +137,7 @@ export function DataTableFacetedFilter<TData, TValue>({
           <CommandInput placeholder={title} />
           <CommandList className="max-h-full">
             <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup className="max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto">
+            <CommandGroup className="max-h-75 scroll-py-1 overflow-x-hidden overflow-y-auto">
               {options.map((option) => {
                 const isSelected = selectedValues.has(option.value)
 

@@ -1,4 +1,5 @@
 import axios from "axios"
+import type { ApiResponse } from "./api"
 
 export interface ApodData {
   title: string
@@ -10,8 +11,11 @@ export interface ApodData {
 }
 
 export async function fetchApod(date: string): Promise<ApodData> {
-  const { data } = await axios.get<ApodData>("/api/apod", {
+  const { data } = await axios.get<ApiResponse<ApodData>>("/api/apod", {
     params: { date },
   })
-  return data
+  if (data.data === null) {
+    throw new Error(data.message)
+  }
+  return data.data
 }

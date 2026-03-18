@@ -60,7 +60,7 @@ export const flrColumns: ColumnDef<FlrEvent>[] = [
         { label: "A", value: "A" },
       ],
     },
-    enableColumnFilter: true,
+    // enableColumnFilter: true,
     filterFn: (row, columnId, filterValue: string[]) => {
       if (!filterValue || filterValue.length === 0) return true
       const classType = row.getValue<string>(columnId)
@@ -111,7 +111,7 @@ export const flrColumns: ColumnDef<FlrEvent>[] = [
       variant: "text",
       placeholder: "Search location...",
     },
-    enableColumnFilter: true,
+    // enableColumnFilter: true,
   },
   {
     id: "active_region_num",

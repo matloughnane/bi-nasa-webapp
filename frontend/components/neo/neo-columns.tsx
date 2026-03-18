@@ -106,11 +106,5 @@ export const neoColumns: ColumnDef<NeoObject>[] = [
         { label: "No", value: "false" },
       ],
     },
-    enableColumnFilter: true,
-    filterFn: (row, columnId, filterValue: string[]) => {
-      if (!filterValue || filterValue.length === 0) return true
-      const cellValue = String(row.getValue(columnId))
-      return filterValue.includes(cellValue)
-    },
   },
 ]

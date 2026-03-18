@@ -9,10 +9,10 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { BookOpen, ChevronLeftCircle, Computer, Earth, Settings, Sun } from "lucide-react"
+import { ChevronLeftCircle, Earth, Info, Sun } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { Logo } from "../common/logo"
 import Link from "next/link"
 
@@ -27,6 +27,11 @@ const data = {
       title: "Solar Flares",
       url: "/solar-flares",
       icon: <Sun />,
+    },
+    {
+      title: "About",
+      url: "/about",
+      icon: <Info />,
     },
     // {
     //   title: "Settings",
@@ -44,13 +49,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="/">
-                <div className="h-6 w-32">
-                  <Logo />
-                </div>
-              </a>
-            </SidebarMenuButton>
+            {/* <SidebarMenuButton size="lg" asChild> */}
+            <Link href="/">
+              <div className="my-2 block h-6 w-32">
+                <Logo />
+              </div>
+            </Link>
+            {/* </SidebarMenuButton> */}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -58,12 +63,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <Link
-          href={"/"}
-          className="flex flex-row justify-center items-center text-sm"
-        >
-          <ChevronLeftCircle className="mr-2 h-4 w-4" /> Back to Landing
-        </Link>
+        <Button variant="outline" size="sm" asChild>
+          <Link href="/">
+            <ChevronLeftCircle className="mr-2 h-4 w-4" /> Back to Landing
+          </Link>
+        </Button>
       </SidebarFooter>
     </Sidebar>
   )

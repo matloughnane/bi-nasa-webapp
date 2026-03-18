@@ -1,21 +1,43 @@
-# Next.js template
+# Frontend — NASA Dashboard
 
-This is a Next.js template with shadcn/ui.
+Next.js 16 app with a squared theme based on the NASA worm logo, dark mode support (press `d` to toggle), and OKLCH colour variables throughout.
 
-## Adding components
+## Tech
 
-To add components to your app, run the following command:
+- [Next.js (App Router)](https://nextjs.org/) with Turbopack for dev
+- [TailwindCSS](https://tailwindcss.com/) v4 with [ui.shadcn](https://ui.shadcn.com/) components
+- [Tanstack Query](https://tanstack.com/query/latest) for data fetching and caching
+- [Tanstack Table](https://tanstack.com/table/latest) + [DiceUI Table](https://www.diceui.com/docs/components/data-table) for sortable, paginated tables
+- [Visx](https://airbnb.io/visx/) for charts (XYChart, geo projections, zoom)
+- [d3-geo](https://d3js.org/) for the solar flare sun map projection
+- [react-markdown](https://github.com/remarkjs/react-markdown) for the about page content
+
+## Pages
+
+- `/` — Landing page with feature cards and APOD
+- `/about` — About the project (markdown-rendered)
+- `/near-earth-objects` — NEO dashboard with stacked bar chart and data table
+- `/solar-flares` — Solar flare dashboard with interactive sun map and data table
+
+## Scripts
 
 ```bash
-npx shadcn@latest add button
+pnpm dev              # Start dev server (Turbopack)
+pnpm build            # Production build
+pnpm start            # Start production server
+pnpm lint             # Run ESLint
+pnpm format           # Run Prettier
+pnpm typecheck        # Type check with tsc
+pnpm test             # Run tests
+pnpm test:watch       # Run tests in watch mode
+pnpm test:coverage    # Run tests with coverage
 ```
 
-This will place the ui components in the `components` directory.
+## Installation
 
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
+```bash
+pnpm install
+pnpm dev
 ```
+
+Runs on `http://localhost:3000`. Expects the backend to be running on `http://localhost:4000`.

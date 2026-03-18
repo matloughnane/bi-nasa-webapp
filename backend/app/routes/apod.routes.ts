@@ -5,12 +5,14 @@ import { z } from "zod";
 
 const router: Router = Router();
 
-const apodQuerySchema = z.object({
-  date: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD format")
-    .optional(),
-});
+const apodQuerySchema = z
+  .object({
+    date: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD format")
+      .optional(),
+  })
+  .strict();
 
 router.get("/", validate(apodQuerySchema, "query"), getApod);
 
