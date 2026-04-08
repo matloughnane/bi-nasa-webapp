@@ -172,28 +172,6 @@ export default function NearEarthObjectsPage() {
         }
         isLoading={isFetching}
       />
-      {/* <div className="flex flex-col items-start justify-between lg:flex-row lg:items-center"> */}
-      {/* <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">
-            Near Earth Objects
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Asteroid close-approach data from NASA&apos;s NeoWs API.
-          </p>
-        </div>
-
-        <div className="flex flex-col w-full pt-2">
-          <div className="flex flex-col md:flex-row items-end gap-2">
-            {(isFetching || isFetchingAll) && (
-              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-hidden="true" />
-            )}
-            
-          </div>
-          <span className="pt-2 text-right text-xs text-muted-foreground">
-            Note: This API is limited to 7 days
-          </span>
-        </div> */}
-      {/* </div> */}
 
       <div aria-live="polite" role="status">
         {(isLoading || isLoadingAll) && !result && (

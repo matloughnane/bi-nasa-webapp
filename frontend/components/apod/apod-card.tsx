@@ -37,7 +37,7 @@ export function APODCard() {
         label: "NASA APOD API",
       }}
       actions={
-        <div className="flex items-center gap-2">
+        <div className="flex flex-row items-center justify-end w-full gap-2">
           {isFetching && (
             <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-hidden="true" />
           )}

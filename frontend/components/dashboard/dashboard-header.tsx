@@ -22,7 +22,7 @@ export function DashboardHeader({
         </div>
 
         <div className="flex flex-col w-full pt-2">
-          <div className="flex flex-row justify-end align-middle">
+          <div className="flex flex-row justify-end items-center gap-2">
             {isLoading && (
               <Loader2
                 className="h-4 w-4 animate-spin text-muted-foreground"

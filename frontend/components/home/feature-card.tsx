@@ -31,9 +31,9 @@ export function FeatureCard({
 }: FeatureCardProps) {
   return (
     <Card className="max-w-220">
-      <CardHeader>
-        <CardTitle className="text-xl">{title}</CardTitle>
-        {actions && <CardAction>{actions}</CardAction>}
+      <CardHeader className="flex flex-col md:flex-row">
+        <CardTitle className="flex w-full text-xl">{title}</CardTitle>
+        {actions && <CardAction className="w-full">{actions}</CardAction>}
       </CardHeader>
       <CardContent className="flex flex-col gap-2">{children}</CardContent>
       {source || links ? (
