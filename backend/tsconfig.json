@@ -7,6 +7,7 @@
     "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
+    "types": ["node", "jest"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
@@ -19,5 +20,5 @@
     }
   },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules", "build", "__tests__", "jest.config.ts", "jest.setup.ts"]
+  "exclude": ["node_modules", "build"]
 }
