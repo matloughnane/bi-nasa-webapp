@@ -16,22 +16,19 @@ export async function postSummary(req: Request, res: Response) {
     });
   } catch (err) {
     if (err instanceof UpstreamError) {
-      res
-        .status(err.statusCode)
-        .json({
-          status: "error",
-          message: "Upstream NASA API error",
-          data: null,
-        });
+      logger.error("Summary generation failed", err);
+      res.status(err.statusCode).json({
+        status: "error",
+        message: "Upstream AI API error",
+        data: null,
+      });
     } else {
       logger.error("Summary generation failed", err);
-      res
-        .status(502)
-        .json({
-          status: "error",
-          message: "Failed to generate summary",
-          data: null,
-        });
+      res.status(502).json({
+        status: "error",
+        message: "Failed to generate summary",
+        data: null,
+      });
     }
   }
 }

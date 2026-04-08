@@ -11,6 +11,7 @@ export async function getApod(req: Request, res: Response) {
     res.json({ status: "ok", message: "APOD data retrieved successfully", data });
   } catch (err) {
     if (err instanceof UpstreamError) {
+      logger.error("APOD fetch failed", err);
       res.status(err.statusCode).json({ status: "error", message: "Upstream NASA API error", data: null });
     } else {
       logger.error("APOD fetch failed", err);

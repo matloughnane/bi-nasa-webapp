@@ -25,7 +25,6 @@ export async function fetchApod(date?: string): Promise<unknown> {
   const elapsed = performance.now() - start;
 
   logger.info(`APOD fetch for ${cacheKey} — ${elapsed.toFixed(0)}ms`);
-
   if (!response.ok) {
     throw new UpstreamError(response.status);
   }
